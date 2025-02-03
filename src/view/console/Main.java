@@ -15,6 +15,18 @@ public class Main {
     public static Scanner sc = new Scanner(System.in);
     private static ArrayList<Cine> cines = new ArrayList<>();
 
+    static class ButacaReservadaEx extends Exception {
+        public ButacaReservadaEx(String errorText) {
+            super(errorText);
+        }
+    }
+
+    static class AsientoIncorrectoEx extends Exception {
+        public AsientoIncorrectoEx(String errorText) {
+            super(errorText);
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println("Alexia Rueda Gutierrez y Pau Cano Millan | 2DAW | CINE");
 
@@ -386,14 +398,14 @@ public class Main {
         if (idCine == -1) {
             return;
         }
-    
+
         Cine cine = cines.get(idCine);
-    
+
         if (cine.getSalas().isEmpty()) {
             System.out.println("No hay salas disponibles.");
             return;
         }
-    
+
         System.out.println("Selecciona una película:");
         ArrayList<Pelicula> peliculas = new ArrayList<>();
         for (Sala sala : cine.getSalas()) {
@@ -406,19 +418,16 @@ public class Main {
         for (int i = 0; i < peliculas.size(); i++) {
             System.out.println((i + 1) + ". " + peliculas.get(i).getTitulo());
         }
-    
+
         Pelicula pelicula = null;
         try {
             int peliculaIndex = leerEntero() - 1;
-            pelicula = peliculas.get(peliculaIndex);  
-        } catch (ArrayIndexOutOfBoundsException e) {
+            pelicula = peliculas.get(peliculaIndex);
+        } catch (IndexOutOfBoundsException e) {
             System.out.println("Error: Seleccionaste una película inválida. Inténtalo de nuevo.");
             return;
-        } catch (Exception e) {
-            System.out.println("Ocurrió un error inesperado al seleccionar la película.");
-            return;
         }
-    
+
         Sala sala = null;
         for (Sala s : cine.getSalas()) {
             if (s.getPeliculas().contains(pelicula)) {
@@ -426,79 +435,76 @@ public class Main {
                 break;
             }
         }
-    
+
         if (sala == null) {
             System.out.println("No se encontró la sala para la película seleccionada.");
             return;
         }
-    
+
         if (sala.getSesiones().isEmpty()) {
             System.out.println("No hay sesiones disponibles para esta película.");
             return;
         }
-    
+
         System.out.println("Selecciona una sesión:");
         for (int i = 0; i < sala.getSesiones().size(); i++) {
             if (sala.getSesiones().get(i).getPelicula().equals(pelicula)) {
                 System.out.println((i + 1) + ". " + sala.getSesiones().get(i).getHoraFecha());
             }
         }
-    
+
         Sesion sesion = null;
         try {
             int sesionIndex = leerEntero() - 1;
-            sesion = sala.getSesiones().get(sesionIndex); 
-        } catch (ArrayIndexOutOfBoundsException e) {
+            sesion = sala.getSesiones().get(sesionIndex);
+        } catch (IndexOutOfBoundsException e) {
             System.out.println("Error: Seleccionaste una sesión inválida. Inténtalo de nuevo.");
             return;
-        } catch (Exception e) {
-            System.out.println("Ocurrió un error inesperado al seleccionar la sesión.");
-            return;
         }
-    
+
         if (!sesion.getPelicula().equals(pelicula)) {
             System.out.println("Sesión no válida para la película seleccionada.");
             return;
         }
-    
+
         System.out.print("Introduce el número de fila para la butaca: ");
         int fila = leerEntero() - 1;
         System.out.print("Introduce el número de columna para la butaca: ");
         int columna = leerEntero() - 1;
         sc.nextLine();
-    
+
         try {
             if (fila < 0 || fila >= sesion.getButacas().length || columna < 0 || columna >= sesion.getButacas()[fila].length) {
-                throw new IllegalArgumentException("Número de fila o columna inválido.");
+                throw new AsientoIncorrectoEx("Número de fila o columna inválido.");
             }
-    
+
             Butaca butaca = sesion.getButacas()[fila][columna];
-    
+
             if (butaca == null) {
                 butaca = new Butaca();
                 sesion.getButacas()[fila][columna] = butaca;
             }
-    
+
             if (butaca.isReservada()) {
-                throw new IllegalStateException("La butaca ya está reservada.");
+                throw new ButacaReservadaEx("La butaca ya está reservada.");
             }
-    
+
             int precioEntrada = cine.getPrecioBase();
             butaca.setReservada(true);
-    
+
             System.out.println("¡Compra exitosa!");
             System.out.println("Detalles de la compra:");
             System.out.println("Película: " + sesion.getPelicula().getTitulo());
             System.out.println("Hora de la sesión: " + sesion.getHoraFecha());
             System.out.println("Asiento: Fila " + (fila + 1) + ", Columna " + (columna + 1));
             System.out.println("Precio de la entrada: " + precioEntrada + "€");
-    
-        } catch (IllegalArgumentException e) {
+
+        } catch (AsientoIncorrectoEx e) {
             System.out.println("Error: " + e.getMessage());
-        } catch (IllegalStateException e) {
+        } catch (ButacaReservadaEx e) {
             System.out.println("Error: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Ocurrió un error inesperado durante la compra de la entrada.");
+            System.out.println("Ha ocurrido un error durante la compra de la entrada.");
         }
-    }    
+    }
 }
