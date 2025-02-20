@@ -22,6 +22,7 @@ public class InterfazAdmin extends javax.swing.JFrame {
      * Creates new form InterfazAdmin
      */
     private ArrayList<Cine> listaCines = new ArrayList<>();
+    private Cine cineSeleccionado = new Cine();
 
     public InterfazAdmin() {
         initComponents();
@@ -40,7 +41,10 @@ public class InterfazAdmin extends javax.swing.JFrame {
         jTabbedPane1.removeAll();
         jTabbedPane1.addTab("Home", jPanel1);           // Vista por defecto (puede ser un panel vacío o con información)
         jTabbedPane1.addTab("Crear Cine", jPanel2);       // Formulario de creación de cine
-        jTabbedPane1.addTab("Otro", jPanel3);             // Otra pestaña (si la necesitas)
+        jTabbedPane1.addTab("Cine", jPanel3);
+        jTabbedPane1.addTab("Salas", jPanel4);
+        jTabbedPane1.addTab("Películas", jPanel5);// Otra pestaña (si la necesitas)
+        jTabbedPane1.addTab("Sesiones", jPanel6);
         jTabbedPane1.setSelectedIndex(0); // Mostrar "Home" por defecto
     }
 
@@ -75,26 +79,38 @@ public class InterfazAdmin extends javax.swing.JFrame {
         jTextFieldPrecioBaseCine = new javax.swing.JTextField();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableSalas = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jListSalas = new javax.swing.JList<>();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanelSide.setBackground(new java.awt.Color(51, 255, 51));
+        jPanelSide.setBackground(java.awt.SystemColor.activeCaption);
 
         jButton2.setText("jButton2");
 
         jButton3.setText("jButton3");
 
+        jButton6.setBackground(java.awt.SystemColor.activeCaption);
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/images/home.png"))); // NOI18N
+        jButton6.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jButton6.setBorderPainted(false);
+        jButton6.setContentAreaFilled(false);
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
             }
         });
 
-        jComboBoxCines.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cine 1", "Cine 2", "Cine 3", "Cine 4" }));
+        jComboBoxCines.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Crear cine"}));
         jComboBoxCines.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxCinesActionPerformed(evt);
@@ -126,16 +142,6 @@ public class InterfazAdmin extends javax.swing.JFrame {
         jPanelSide.setLayout(jPanelSideLayout);
         jPanelSideLayout.setHorizontalGroup(
             jPanelSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSideLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanelSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2))
-                .addGap(41, 41, 41))
-            .addGroup(jPanelSideLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jButton6)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanelSideLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,14 +155,22 @@ public class InterfazAdmin extends javax.swing.JFrame {
                         .addComponent(jLabel3)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSideLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanelSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton3)
+                    .addComponent(jButton2))
+                .addGap(41, 41, 41))
+            .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanelSideLayout.setVerticalGroup(
             jPanelSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelSideLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
-                .addGap(9, 9, 9)
+                .addGap(3, 3, 3)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelSideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -166,9 +180,9 @@ public class InterfazAdmin extends javax.swing.JFrame {
                 .addComponent(jButton2)
                 .addGap(36, 36, 36)
                 .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
                 .addComponent(jButton6)
-                .addGap(18, 18, 18))
+                .addContainerGap())
         );
 
         getContentPane().add(jPanelSide, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 441));
@@ -177,7 +191,7 @@ public class InterfazAdmin extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 437, Short.MAX_VALUE)
+            .addGap(0, 420, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -224,11 +238,19 @@ public class InterfazAdmin extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setForeground(java.awt.SystemColor.activeCaption);
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("CREACIÓN DE CINE");
+        jLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 437, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(85, 85, 85)
@@ -245,11 +267,14 @@ public class InterfazAdmin extends javax.swing.JFrame {
                             .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
                             .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addContainerGap(86, Short.MAX_VALUE)))
+                    .addContainerGap(69, Short.MAX_VALUE)))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 405, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jLabel1)
+                .addContainerGap(359, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(59, 59, 59)
@@ -277,52 +302,132 @@ public class InterfazAdmin extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("tab2", jPanel2);
 
-        jLabel2.setText("jLabel2");
+        jTableSalas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTableSalas);
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel2.setForeground(java.awt.SystemColor.activeCaption);
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("SALAS");
+        jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        jListSalas.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(jListSalas);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(214, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(186, 186, 186))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(127, 127, 127)
+                .addGap(9, 9, 9)
                 .addComponent(jLabel2)
-                .addContainerGap(262, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(72, 72, 72))
         );
 
         jTabbedPane1.addTab("tab3", jPanel3);
 
-        getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 1, -1, 440));
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 420, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 405, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("tab4", jPanel4);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 420, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 405, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("tab5", jPanel5);
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 420, Short.MAX_VALUE)
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 405, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("tab6", jPanel6);
+
+        getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 1, 420, 440));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-    // Por ejemplo, podría volver a la pestaña "Home" o realizar otra acción
-    jTabbedPane1.setSelectedIndex(0);
+        // Por ejemplo, podría volver a la pestaña "Home" o realizar otra acción
+        jTabbedPane1.setSelectedIndex(0);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jComboBoxCinesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxCinesActionPerformed
-       // Aquí puedes agregar la lógica para cuando se seleccione un cine
-    String seleccionado = (String) jComboBoxCines.getSelectedItem();
-    if ("Seleccionar cine".equals(seleccionado)) {
-        // Mostrar la vista por defecto (Home)
-        jTabbedPane1.setSelectedIndex(0);
-    } else {
-        System.out.println("Cine seleccionado: " + seleccionado);
-        // Aquí podrías cambiar la vista o mostrar detalles del cine
-    }
+        // Aquí puedes agregar la lógica para cuando se seleccione un cine
+        String seleccionado = (String) jComboBoxCines.getSelectedItem();
+        if (seleccionado == null) {
+            return;
+        }
+
+        if ("Seleccionar cine".equals(seleccionado)) {
+            jTabbedPane1.setSelectedIndex(0);
+        } else if ("Crear cine".equals(seleccionado)) {
+            jTabbedPane1.setSelectedIndex(0);
+        } else {
+            System.out.println("Cine seleccionado: " + seleccionado);
+            jTabbedPane1.setSelectedIndex(2);
+        }
     }//GEN-LAST:event_jComboBoxCinesActionPerformed
 
     private void jButtonAddCineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddCineActionPerformed
 // Cambiar a la pestaña "Crear Cine" (índice 1)
-    jTabbedPane1.setSelectedIndex(1);
+        jTabbedPane1.setSelectedIndex(1);
     }//GEN-LAST:event_jButtonAddCineActionPerformed
 
     private void jTextFieldNameCineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNameCineActionPerformed
@@ -367,14 +472,14 @@ public class InterfazAdmin extends javax.swing.JFrame {
         jTextFieldPrecioBaseCine.setText("");
 
         // Opcional: volver a la pestaña "Home" luego de crear el cine
-        jTabbedPane1.setSelectedIndex(0);
+        jTabbedPane1.setSelectedIndex(2);
 
         System.out.println("Cine creado con éxito: " + nuevoCine.getNombre());
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-         // Al cancelar, volver a la pestaña "Home"
-    jTabbedPane1.setSelectedIndex(0);
+        // Al cancelar, volver a la pestaña "Home"
+        jTabbedPane1.setSelectedIndex(0);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
@@ -420,6 +525,7 @@ public class InterfazAdmin extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButtonAddCine;
     private javax.swing.JComboBox<String> jComboBoxCines;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -428,11 +534,18 @@ public class InterfazAdmin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelnumsalascine;
     private javax.swing.JLabel jLabelpreciobasecine;
     private javax.swing.JLabel jLabelubicine;
+    private javax.swing.JList<String> jListSalas;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanelSide;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTableSalas;
     private javax.swing.JTextField jTextFieldNameCine;
     private javax.swing.JTextField jTextFieldNumSalasCine;
     private javax.swing.JTextField jTextFieldPrecioBaseCine;
