@@ -80,7 +80,7 @@ public class Sala {
         return peliculas;
     }
 
-    public void setPeliculas(ArrayList<Pelicula> peliculas) {
-        this.peliculas = peliculas;
+    public void setPeliculas(Pelicula pelicula) {
+        this.peliculas.add(pelicula);
     }
 }

@@ -68,7 +68,11 @@ public class Cine {
     }
 
     public void setSalas(ArrayList<Sala> salas) {
-        this.salas = salas;
+        if (this.salas.isEmpty()) {
+            this.salas = salas;
+        } else {
+            this.salas.add(salas.get(0));
+        }
     }
 
     public ArrayList<Entrada> getEntradas() {

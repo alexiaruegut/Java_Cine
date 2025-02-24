@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package view.gui;
 
 import java.awt.CardLayout;
@@ -13,11 +9,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
+import javax.swing.table.DefaultTableModel;
 import model.*;
 
 /**
  *
- * @author alexiaruegut
+ * @author alexiaruegut & paucanmil
  */
 public class InterfazAdmin extends javax.swing.JFrame {
 
@@ -27,29 +24,38 @@ public class InterfazAdmin extends javax.swing.JFrame {
     private ArrayList<Cine> listaCines = new ArrayList<>();
     private Cine cineSeleccionado = new Cine();
     public static DefaultListModel<String> modeloSalas = new DefaultListModel<>();
+    public static DefaultTableModel modeloPelis = new DefaultTableModel(
+            new Object[][]{},
+            new String[]{"Titulo", "Sala", "Crear Sesión", "Ver Sesiones"}
+    ) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false; 
+        }
+    };
 
     public InterfazAdmin() {
         initComponents();
 
-        // Agregar placeholder inicial
         setPlaceholder(jTextFieldNameCine, "Introduce el nombre del cine");
         setPlaceholder(jTextFieldUbiCine, "Introduce la ubicación del cine");
         setPlaceholder(jTextFieldNumSalasCine, "Introduce el número de salas");
         setPlaceholder(jTextFieldPrecioBaseCine, "Introduce el precio base de entradas");
+        
+        setPlaceholder(jTextFieldNamePeli, "Introduce el título de la película");
+        setPlaceholder(jTextFieldDuracionPeli, "Introduce la duración de la película");
+        setPlaceholder(jTextFieldDescripcionPeli, "Introduce la sinopsis de la película");
 
         jTextFieldNameCine.setForeground(new java.awt.Color(150, 150, 150));
 
-        // Reorganizar las pestañas:
-        // Queremos que la pestaña 0 ("Home") sea la vista principal,
-        // la pestaña 1 ("Crear Cine") contenga el formulario para crear cines.
         jTabbedPane1.removeAll();
-        jTabbedPane1.addTab("Home", jPanel1);           // Vista por defecto (puede ser un panel vacío o con información)
-        jTabbedPane1.addTab("Crear Cine", jPanel2);       // Formulario de creación de cine
+        jTabbedPane1.addTab("Home", jPanel1);  
+        jTabbedPane1.addTab("Crear Cine", jPanel2);     
         jTabbedPane1.addTab("Cine", jPanel3);
         jTabbedPane1.addTab("Salas", jPanel4);
-        jTabbedPane1.addTab("Películas", jPanel5);// Otra pestaña (si la necesitas)
+        jTabbedPane1.addTab("Películas", jPanel5);
         jTabbedPane1.addTab("Sesiones", jPanel6);
-        jTabbedPane1.setSelectedIndex(0); // Mostrar "Home" por defecto
+        jTabbedPane1.setSelectedIndex(0);
     }
 
     /**
@@ -70,6 +76,9 @@ public class InterfazAdmin extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabelnombrecine = new javax.swing.JLabel();
         jTextFieldNameCine = new javax.swing.JTextField();
@@ -84,14 +93,13 @@ public class InterfazAdmin extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTableSalas = new javax.swing.JTable();
+        jTablePelis = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jListSalas = new javax.swing.JList<>();
         jButtonCrearSalaForm = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
+        jButtonCrearSalaForm1 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jComboBoxTipoSala = new javax.swing.JComboBox<>();
@@ -101,15 +109,17 @@ public class InterfazAdmin extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabelnombrePELI = new javax.swing.JLabel();
-        jTextFieldNamePELI = new javax.swing.JTextField();
+        jTextFieldNamePeli = new javax.swing.JTextField();
         jLabelDURACIONPELI = new javax.swing.JLabel();
-        jTextFieldduracionpeli = new javax.swing.JTextField();
+        jTextFieldDuracionPeli = new javax.swing.JTextField();
         jLabelnumIDIOMApeli = new javax.swing.JLabel();
         jLabeldescripcionpeli = new javax.swing.JLabel();
-        jTextFielddescripcionpeli = new javax.swing.JTextField();
-        jButton10 = new javax.swing.JButton();
+        jTextFieldDescripcionPeli = new javax.swing.JTextField();
+        jButtonCancelarPeli = new javax.swing.JButton();
         jButton11 = new javax.swing.JButton();
-        jComboBoxidiomapeli = new javax.swing.JComboBox<>();
+        jComboBoxSalaPeli = new javax.swing.JComboBox<>();
+        jComboBoxIdiomaPeli = new javax.swing.JComboBox<>();
+        jLabelnumIDIOMApeli1 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabelnombrePELI1 = new javax.swing.JLabel();
@@ -206,18 +216,50 @@ public class InterfazAdmin extends javax.swing.JFrame {
 
         getContentPane().add(jPanelSide, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 441));
 
+        jTabbedPane1.setBackground(new java.awt.Color(249, 249, 249));
+
+        jPanel1.setBackground(new java.awt.Color(249, 249, 249));
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText("Bienvenid@, Admin");
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel13.setText("Maneja cines, sus salas y películas");
+
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("Selecciona un cine para empezar");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 420, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 405, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(162, 162, 162)
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel14)
+                .addContainerGap(176, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("tab1", jPanel1);
+
+        jPanel2.setBackground(new java.awt.Color(249, 249, 249));
 
         jLabelnombrecine.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabelnombrecine.setText("NOMBRE CINE");
@@ -267,72 +309,58 @@ public class InterfazAdmin extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(85, 85, 85)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabelpreciobasecine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabelnumsalascine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabelnombrecine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabelubicine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jTextFieldNameCine)
-                        .addComponent(jTextFieldUbiCine)
-                        .addComponent(jTextFieldNumSalasCine)
-                        .addComponent(jTextFieldPrecioBaseCine, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addContainerGap(69, Short.MAX_VALUE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 82, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabelpreciobasecine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelnumsalascine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelnombrecine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelubicine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextFieldNameCine)
+                    .addComponent(jTextFieldUbiCine)
+                    .addComponent(jTextFieldNumSalasCine)
+                    .addComponent(jTextFieldPrecioBaseCine, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(72, 72, 72))
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addGap(48, 48, 48)
                 .addComponent(jLabel1)
-                .addContainerGap(359, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(59, 59, 59)
-                    .addComponent(jLabelnombrecine)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jTextFieldNameCine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(jLabelubicine)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jTextFieldUbiCine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(jLabelnumsalascine)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jTextFieldNumSalasCine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(jLabelpreciobasecine)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jTextFieldPrecioBaseCine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton7)
-                        .addComponent(jButton8))
-                    .addContainerGap(59, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabelnombrecine)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldNameCine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelubicine)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldUbiCine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelnumsalascine)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldNumSalasCine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelpreciobasecine)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldPrecioBaseCine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton7)
+                    .addComponent(jButton8))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("tab2", jPanel2);
 
-        jTableSalas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTableSalas);
+        jPanel3.setBackground(new java.awt.Color(249, 249, 249));
+
+        jTablePelis.setModel(modeloPelis);
+        jScrollPane1.setViewportView(jTablePelis);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setForeground(java.awt.SystemColor.activeCaption);
@@ -356,9 +384,12 @@ public class InterfazAdmin extends javax.swing.JFrame {
         jLabel7.setText("SALAS");
         jLabel7.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        jLabel13.setText("COLUMNA PARA CREAR SESION Y OTRA DE VER SESIONES");
-
-        jLabel14.setText("EN LA TABLA MOSTRAR  TITULO PELI Y SU SALA");
+        jButtonCrearSalaForm1.setText("+");
+        jButtonCrearSalaForm1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCrearSalaForm1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -367,48 +398,46 @@ public class InterfazAdmin extends javax.swing.JFrame {
             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonCrearSalaForm)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel14)
-                            .addComponent(jLabel13))))
-                .addContainerGap(27, Short.MAX_VALUE))
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel3Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
-                    .addContainerGap()))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addComponent(jButtonCrearSalaForm1))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButtonCrearSalaForm)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(49, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(66, Short.MAX_VALUE)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonCrearSalaForm)
-                .addGap(38, 38, 38)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14)
-                .addComponent(jLabel14)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel13)
-                .addContainerGap())
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel3Layout.createSequentialGroup()
-                    .addGap(19, 19, 19)
-                    .addComponent(jLabel7)
-                    .addContainerGap(361, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30))
+                    .addComponent(jButtonCrearSalaForm1, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(40, 40, 40))
         );
 
         jTabbedPane1.addTab("tab3", jPanel3);
+
+        jPanel4.setBackground(new java.awt.Color(249, 249, 249));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setForeground(java.awt.SystemColor.activeCaption);
@@ -420,6 +449,11 @@ public class InterfazAdmin extends javax.swing.JFrame {
             .map(Enum::name)
             .toArray(String[]::new)
         ));
+        jComboBoxTipoSala.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxTipoSalaActionPerformed(evt);
+            }
+        });
 
         jLabelnombrecine1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabelnombrecine1.setText("TIPO DE SALA");
@@ -446,30 +480,25 @@ public class InterfazAdmin extends javax.swing.JFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(75, 75, 75)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(88, 88, 88)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelnombrecine1)
-                            .addComponent(jComboBoxTipoSala, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(67, 67, 67)
-                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonCrearSala, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addComponent(jLabelnombrecine1)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jComboBoxTipoSala, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                            .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(jButtonCrearSala, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(60, 60, 60)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7)
+                .addGap(54, 54, 54)
                 .addComponent(jLabelnombrecine1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBoxTipoSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -477,10 +506,12 @@ public class InterfazAdmin extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton9)
                     .addComponent(jButtonCrearSala))
-                .addContainerGap(265, Short.MAX_VALUE))
+                .addContainerGap(220, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("tab4", jPanel4);
+
+        jPanel5.setBackground(new java.awt.Color(249, 249, 249));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel8.setForeground(java.awt.SystemColor.activeCaption);
@@ -490,29 +521,41 @@ public class InterfazAdmin extends javax.swing.JFrame {
         jLabelnombrePELI.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabelnombrePELI.setText("TÍTULO");
 
-        jTextFieldNamePELI.setForeground(new java.awt.Color(153, 153, 153));
-        jTextFieldNamePELI.setToolTipText("");
-        jTextFieldNamePELI.addActionListener(new java.awt.event.ActionListener() {
+        jTextFieldNamePeli.setForeground(new java.awt.Color(153, 153, 153));
+        jTextFieldNamePeli.setToolTipText("");
+        jTextFieldNamePeli.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldNamePELIActionPerformed(evt);
+                jTextFieldNamePeliActionPerformed(evt);
             }
         });
 
         jLabelDURACIONPELI.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabelDURACIONPELI.setText("DURACIÓN");
 
+        jTextFieldDuracionPeli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldDuracionPeliActionPerformed(evt);
+            }
+        });
+
         jLabelnumIDIOMApeli.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabelnumIDIOMApeli.setText("IDIOMA");
+        jLabelnumIDIOMApeli.setText("IDIOMA                       SALA");
 
         jLabeldescripcionpeli.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabeldescripcionpeli.setText("SINOPSIS");
 
-        jButton10.setBackground(new java.awt.Color(91, 137, 186));
-        jButton10.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton10.setText("CANCELAR");
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
+        jTextFieldDescripcionPeli.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
+                jTextFieldDescripcionPeliActionPerformed(evt);
+            }
+        });
+
+        jButtonCancelarPeli.setBackground(new java.awt.Color(91, 137, 186));
+        jButtonCancelarPeli.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonCancelarPeli.setText("CANCELAR");
+        jButtonCancelarPeli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelarPeliActionPerformed(evt);
             }
         });
 
@@ -525,11 +568,16 @@ public class InterfazAdmin extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxidiomapeli.setModel(new javax.swing.DefaultComboBoxModel<>(
-            java.util.Arrays.stream(enumTipoSala.values())
-            .map(Enum::name)
-            .toArray(String[]::new)
-        ));
+        jComboBoxSalaPeli.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { null }));
+        jComboBoxSalaPeli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxSalaPeliActionPerformed(evt);
+            }
+        });
+
+        jComboBoxIdiomaPeli.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Español", "Catalán", "Inglés" }));
+
+        jLabelnumIDIOMApeli1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -540,64 +588,75 @@ public class InterfazAdmin extends javax.swing.JFrame {
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(77, 77, 77)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jComboBoxidiomapeli, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldDescripcionPeli, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel5Layout.createSequentialGroup()
+                                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jButtonCancelarPeli, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabelnumIDIOMApeli)
+                                        .addComponent(jLabelDURACIONPELI))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabelnumIDIOMApeli1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel5Layout.createSequentialGroup()
+                                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabelnombrePELI, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jTextFieldNamePeli, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jTextFieldDuracionPeli, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel5Layout.createSequentialGroup()
+                                            .addComponent(jComboBoxIdiomaPeli, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(jComboBoxSalaPeli, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addGap(43, 43, 43)))
+                            .addComponent(jLabeldescripcionpeli, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addGap(77, 77, 77)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabeldescripcionpeli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabelnumIDIOMApeli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabelnombrePELI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabelDURACIONPELI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jTextFieldNamePELI)
-                        .addComponent(jTextFieldduracionpeli)
-                        .addComponent(jTextFielddescripcionpeli, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap(77, Short.MAX_VALUE)))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addContainerGap(34, Short.MAX_VALUE)
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE)
-                .addComponent(jComboBoxidiomapeli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(108, 108, 108)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabelnombrePELI)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldNamePeli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelDURACIONPELI)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldDuracionPeli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabelnumIDIOMApeli1)
+                        .addGap(22, 22, 22))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabelnumIDIOMApeli)
+                        .addGap(18, 18, 18)))
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton10)
+                    .addComponent(jComboBoxSalaPeli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxIdiomaPeli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabeldescripcionpeli)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldDescripcionPeli, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonCancelarPeli)
                     .addComponent(jButton11))
-                .addGap(37, 37, 37))
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addGap(59, 59, 59)
-                    .addComponent(jLabelnombrePELI)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jTextFieldNamePELI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(jLabelDURACIONPELI)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jTextFieldduracionpeli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(jLabelnumIDIOMApeli)
-                    .addGap(46, 46, 46)
-                    .addComponent(jLabeldescripcionpeli)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jTextFielddescripcionpeli, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(77, Short.MAX_VALUE)))
+                .addGap(28, 28, 28))
         );
 
         jTabbedPane1.addTab("tab5", jPanel5);
 
+        jPanel6.setBackground(new java.awt.Color(249, 249, 249));
+
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel9.setForeground(java.awt.SystemColor.activeCaption);
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("CREAR SESIÓN");
+        jLabel9.setText("CREAR SESIÓN /PRÓXIMAMENTE");
 
         jLabelnombrePELI1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabelnombrePELI1.setText("TÍTULO");
@@ -654,12 +713,11 @@ public class InterfazAdmin extends javax.swing.JFrame {
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(81, 81, 81)
+                        .addGap(75, 75, 75)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10)
                             .addComponent(jLabelnombrePELI1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -680,7 +738,7 @@ public class InterfazAdmin extends javax.swing.JFrame {
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(49, 49, 49)
                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabelnombrePELI1)
@@ -702,23 +760,21 @@ public class InterfazAdmin extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton12)
                     .addComponent(jButton13))
-                .addContainerGap(62, Short.MAX_VALUE))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("tab6", jPanel6);
 
-        getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 1, 420, 440));
+        getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, -39, 420, 480));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // Por ejemplo, podría volver a la pestaña "Home" o realizar otra acción
         jTabbedPane1.setSelectedIndex(0);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jComboBoxCinesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxCinesActionPerformed
-        // Aquí puedes agregar la lógica para cuando se seleccione un cine
         String seleccionado = (String) jComboBoxCines.getSelectedItem();
         if (seleccionado == null) {
             return;
@@ -730,12 +786,29 @@ public class InterfazAdmin extends javax.swing.JFrame {
             jTabbedPane1.setSelectedIndex(0);
         } else {
             System.out.println("Cine seleccionado: " + seleccionado);
+            for (Cine cine : listaCines) {
+                if (cine.getNombre().equals(seleccionado)) {
+                    cineSeleccionado = cine;
+                }
+            }
+            modeloSalas.removeAllElements();
+            for (Sala sala : cineSeleccionado.getSalas()) {
+                modeloSalas.addElement(sala.getTipoSala().toString());
+            }
+            for (int i = 0; i < modeloPelis.getRowCount(); i++) {
+                modeloPelis.removeRow(i);
+            }
+            for (Sala sala : cineSeleccionado.getSalas()) {
+                for (Pelicula peli : sala.getPeliculas()) {
+                    String[] rowData = {peli.getTitulo(), sala.getTipoSala().toString()};
+                    modeloPelis.addRow(rowData);
+                }
+            }
             jTabbedPane1.setSelectedIndex(2);
         }
     }//GEN-LAST:event_jComboBoxCinesActionPerformed
 
     private void jButtonAddCineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddCineActionPerformed
-// Cambiar a la pestaña "Crear Cine" (índice 1)
         jTabbedPane1.setSelectedIndex(1);
     }//GEN-LAST:event_jButtonAddCineActionPerformed
 
@@ -749,7 +822,6 @@ public class InterfazAdmin extends javax.swing.JFrame {
         String numSalasStr = jTextFieldNumSalasCine.getText().trim();
         String precioBaseStr = jTextFieldPrecioBaseCine.getText().trim();
 
-        // Verificar que no queden los placeholders o campos vacíos
         if (nombre.isEmpty() || nombre.equals("Introduce el nombre del cine")
                 || ubicacion.isEmpty() || ubicacion.equals("Introduce la ubicación del cine")
                 || numSalasStr.isEmpty() || numSalasStr.equals("Introduce el número de salas")
@@ -758,7 +830,6 @@ public class InterfazAdmin extends javax.swing.JFrame {
             return;
         }
 
-        // Convertir los campos numéricos
         int totalSalas, precioBase;
         try {
             totalSalas = Integer.parseInt(numSalasStr);
@@ -768,27 +839,22 @@ public class InterfazAdmin extends javax.swing.JFrame {
             return;
         }
 
-        // Crear el cine usando el constructor del modelo
         Cine nuevoCine = new Cine(nombre, ubicacion, totalSalas, precioBase, new ArrayList<>());
-        // Agregar el cine a la lista y actualizar el ComboBox
         cineSeleccionado = nuevoCine;
         listaCines.add(nuevoCine);
         actualizarComboBoxCines(listaCines);
 
-        // Limpiar los campos del formulario
         jTextFieldNameCine.setText("");
         jTextFieldUbiCine.setText("");
         jTextFieldNumSalasCine.setText("");
         jTextFieldPrecioBaseCine.setText("");
 
-        // Opcional: volver a la pestaña "Home" luego de crear el cine
-        jTabbedPane1.setSelectedIndex(2);
+        jTabbedPane1.setSelectedIndex(0);
 
         System.out.println("Cine creado con éxito: " + nuevoCine.getNombre());
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // Al cancelar, volver a la pestaña "Home"
         jTabbedPane1.setSelectedIndex(0);
     }//GEN-LAST:event_jButton7ActionPerformed
 
@@ -809,16 +875,57 @@ public class InterfazAdmin extends javax.swing.JFrame {
         jTabbedPane1.setSelectedIndex(2);
     }//GEN-LAST:event_jButtonCrearSalaActionPerformed
 
-    private void jTextFieldNamePELIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNamePELIActionPerformed
+    private void jTextFieldNamePeliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNamePeliActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldNamePELIActionPerformed
+    }//GEN-LAST:event_jTextFieldNamePeliActionPerformed
 
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton10ActionPerformed
+    private void jButtonCancelarPeliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarPeliActionPerformed
+        jTabbedPane1.setSelectedIndex(2);
+    }//GEN-LAST:event_jButtonCancelarPeliActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        // TODO add your handling code here:
+        String nombre = jTextFieldNamePeli.getText().trim();
+        String duracion = jTextFieldDuracionPeli.getText().trim();
+        String selectedIdioma = (String) jComboBoxIdiomaPeli.getSelectedItem();
+        enumTipoSala selectedSala = enumTipoSala.valueOf((String) jComboBoxTipoSala.getSelectedItem());
+        String descripcion = jTextFieldDescripcionPeli.getText().trim();
+
+        if (nombre.isEmpty() || nombre.equals("Introduce el nombre de la película")
+                || duracion.isEmpty() || duracion.equals("Introduce la duración de la película")
+                || descripcion.isEmpty() || descripcion.equals("Introduce la sinopsis de la película")) {
+            System.out.println("Por favor, completa todos los campos correctamente.");
+            return;
+        }
+
+        int intDuracion;
+        try {
+            intDuracion = Integer.parseInt(duracion);
+        } catch (NumberFormatException e) {
+            System.out.println("La duración de la película debe ser numérica.");
+            return;
+        }
+
+        Pelicula nuevaPeli = new Pelicula(nombre, intDuracion, selectedIdioma, descripcion);
+        Sala selectedSalaObj = new Sala();
+        for (Sala sala : cineSeleccionado.getSalas()) {
+            if (sala.getTipoSala().equals(selectedSala)) {
+                selectedSalaObj = sala;
+            }
+        }
+
+        selectedSalaObj.setPeliculas(nuevaPeli);
+
+        String[] rowData = {nuevaPeli.getTitulo(), selectedSala.toString()};
+        modeloPelis.addRow(rowData);
+        actualizarComboBoxCines(listaCines);
+
+        jTextFieldNameCine.setText("");
+        jTextFieldUbiCine.setText("");
+        jTextFieldNumSalasCine.setText("");
+        jTextFieldPrecioBaseCine.setText("");
+
+        jTabbedPane1.setSelectedIndex(2);
+;
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jTextFieldNamePELI1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNamePELI1ActionPerformed
@@ -836,6 +943,31 @@ public class InterfazAdmin extends javax.swing.JFrame {
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton13ActionPerformed
+
+    private void jTextFieldDuracionPeliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldDuracionPeliActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldDuracionPeliActionPerformed
+
+    private void jComboBoxTipoSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoSalaActionPerformed
+        //jTabbedPane1.setSelectedIndex(2);
+    }//GEN-LAST:event_jComboBoxTipoSalaActionPerformed
+
+    private void jButtonCrearSalaForm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearSalaForm1ActionPerformed
+        ArrayList<Sala> salas = new ArrayList<>();
+        for (Sala sala : cineSeleccionado.getSalas()) {
+            salas.add(sala);
+        }
+        actualizarComboBoxSalas(salas);
+        jTabbedPane1.setSelectedIndex(4);
+    }//GEN-LAST:event_jButtonCrearSalaForm1ActionPerformed
+
+    private void jComboBoxSalaPeliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSalaPeliActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxSalaPeliActionPerformed
+
+    private void jTextFieldDescripcionPeliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldDescripcionPeliActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldDescripcionPeliActionPerformed
 
     /**
      * @param args the command line arguments
@@ -873,7 +1005,6 @@ public class InterfazAdmin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
@@ -882,13 +1013,17 @@ public class InterfazAdmin extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JButton jButtonAddCine;
+    private javax.swing.JButton jButtonCancelarPeli;
     private javax.swing.JButton jButtonCrearSala;
     private javax.swing.JButton jButtonCrearSalaForm;
+    private javax.swing.JButton jButtonCrearSalaForm1;
     private javax.swing.JComboBox<String> jComboBoxCines;
+    private javax.swing.JComboBox<String> jComboBoxIdiomaPeli;
+    private javax.swing.JComboBox<String> jComboBoxSalaPeli;
     private javax.swing.JComboBox<String> jComboBoxTipoSala;
-    private javax.swing.JComboBox<String> jComboBoxidiomapeli;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -910,6 +1045,7 @@ public class InterfazAdmin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelnombrecine;
     private javax.swing.JLabel jLabelnombrecine1;
     private javax.swing.JLabel jLabelnumIDIOMApeli;
+    private javax.swing.JLabel jLabelnumIDIOMApeli1;
     private javax.swing.JLabel jLabelnumsalascine;
     private javax.swing.JLabel jLabelpreciobasecine;
     private javax.swing.JLabel jLabelubicine;
@@ -924,16 +1060,16 @@ public class InterfazAdmin extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTableSalas;
+    private javax.swing.JTable jTablePelis;
+    private javax.swing.JTextField jTextFieldDescripcionPeli;
+    private javax.swing.JTextField jTextFieldDuracionPeli;
     private javax.swing.JTextField jTextFieldNameCine;
-    private javax.swing.JTextField jTextFieldNamePELI;
     private javax.swing.JTextField jTextFieldNamePELI1;
     private javax.swing.JTextField jTextFieldNamePELI2;
+    private javax.swing.JTextField jTextFieldNamePeli;
     private javax.swing.JTextField jTextFieldNumSalasCine;
     private javax.swing.JTextField jTextFieldPrecioBaseCine;
     private javax.swing.JTextField jTextFieldUbiCine;
-    private javax.swing.JTextField jTextFielddescripcionpeli;
-    private javax.swing.JTextField jTextFieldduracionpeli;
     // End of variables declaration//GEN-END:variables
 
     private void setPlaceholder(JTextField textField, String placeholder) {
@@ -960,11 +1096,25 @@ public class InterfazAdmin extends javax.swing.JFrame {
     }
 
     public void actualizarComboBoxCines(ArrayList<Cine> cines) {
-        jComboBoxCines.removeAllItems(); // Limpia los valores previos
-        jComboBoxCines.addItem("Seleccionar cine"); // Opción por defecto
+        jComboBoxCines.removeAllItems(); 
+        jComboBoxCines.addItem("Seleccionar cine"); 
         for (Cine cine : cines) {
             jComboBoxCines.addItem(cine.getNombre());
         }
     }
-    
+
+    public void actualizarComboBoxSalas(ArrayList<Sala> salas) {
+        jComboBoxSalaPeli.removeAllItems(); 
+        for (Sala sala : salas) {
+            jComboBoxSalaPeli.addItem(sala.getTipoSala().toString());
+        }
+    }
+
+    public static void agregarFilaDesdeString(javax.swing.JTable table, String data) {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+        String[] valores = data.split(",");
+
+        model.addRow(valores);
+    }
 }
